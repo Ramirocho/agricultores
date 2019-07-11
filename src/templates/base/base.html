@@ -1,0 +1,107 @@
+{% load staticfiles %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+
+    {% block extrastatic %}
+
+    {% endblock %}
+
+    
+	<link href="{% static 'css/fontello.css' %}" rel="stylesheet">
+    <link href="{% static 'css/estilos.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <meta name="viewport" content="width=device-width">
+    {% block title %}
+    <title>Inicio</title>
+    {% endblock%}
+   
+
+</head>
+
+
+<body class="bodyuser">
+
+<header>
+	<input type="checkbox" id="btn-menu">
+	<label for="btn-menu"><img src="/static/img/menu.png" alt="" class="imagen-menu"></label>
+
+	<nav class="menu">
+		<ul>
+			<ul ><li><a href="{% url 'base:index' %}">Inicio</a></li></ul>
+			<ul> <li> <a href="{% url 'registrarse' %}"> Registrate </a> </li> </ul>
+			<ul><li><a href="{% url 'login' %}">iniciar sesion</a></li></ul>
+		</ul>
+	</nav>
+</header>
+
+
+
+{% block content %}
+
+<h1 class="titulo">Tienda Agricultores</h1>
+
+
+    <div class="content-all">
+        <div class="content-img" id="img1">
+            <a href="#img5" class="icon-left-open"></a>
+            <img src="/static/img/1.png">
+            <a href="#img2" class="icon-right-open"></a>
+        </div>
+        <div class="content-img" id="img2">
+            <a href="#img1" class="icon-left-open"></a>
+            <img src="/static/img/2.jpg">
+            <a href="#img3" class="icon-right-open"></a>
+        </div>
+        <div class="content-img" id="img3">
+            <a href="#img2" class="icon-left-open"></a>
+            <img src="/static/img/3.jpg">
+            <a href="#img4" class="icon-right-open"></a>
+        </div>
+        <div class="content-img" id="img4">
+            <a href="#img3" class="icon-left-open"></a>
+            <img src="/static/img/4.jpg">
+            <a href="#img5" class="icon-right-open"></a>
+        </div>
+        <div class="content-img" id="img5">
+            <a href="#img4" class="icon-left-open"></a>
+            <img src="/static/img/5.jpg">
+            <a href="#img1" class="icon-right-open"></a>
+        </div>
+    </div>
+
+
+<h1 class="titulo">Proyecto</h1>
+
+<article id="articulo1">
+	<p>Proyecto motivado por</p>
+	<p>• Falta de organización de los productores.</p>
+	<p>• El restringido uso de la tecnología para la distribución, por parte de estos productores.</p>
+	<p>• Canales de comercio limitados, muchas veces comercio local, por encargo, por dato.</p>
+</article>
+
+{% endblock %}
+
+<a href="#"></a>
+
+{% block footer %}
+
+<div class="finalizar">
+
+            <p>Duoc 2019</p>
+    <br>
+    <br>
+
+</div>
+
+{% endblock %}
+
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+
+</body>
+</html>

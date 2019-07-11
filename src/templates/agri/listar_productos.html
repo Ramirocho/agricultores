@@ -1,0 +1,29 @@
+{% extends 'base/base_logeado.html' %}
+
+{% block content %}
+
+<div align="center">
+	<h1 style="font-family: times;" > PRODUCTOS PUBLICADOS </h1>
+</div>
+<br>
+
+{% load staticfiles %}
+
+		{% if productos %}
+		{% for producto in productos %}
+		<div>
+			<center>
+				<img style="width:200px;height: 200px;"  src="{{ producto.FotoProducto.url }}">
+				<center>{{ producto.TipoFruVer }}</center>
+				<center> Cantidad: {{ producto.CantidadKG }} KG</center>
+				<center> Precio: ${{ producto.Precio }}</center>
+				<center> Vendedor: {{ producto.UsuarioName }}</center>
+				<center> <a href="{% url 'sistema:listaproducto2' producto.id %}">Ver ubicación</a></center>
+			</center>
+		</div>
+		{% endfor %}
+		{% else %}
+		<h1>No hay productos</h1>
+		{% endif %}
+
+{% endblock %}

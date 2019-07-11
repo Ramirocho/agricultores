@@ -1,0 +1,165 @@
+{% load staticfiles %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+
+    {% block extrastatic %}
+
+    {% endblock %}
+
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.0/mapsjs-ui.css?dp-version=1549984893" />
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-service.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+
+    
+	  <link rel="stylesheet" href="{% static 'css/fontello.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/estilos-logeado.css' %}">
+    {% block title %}
+    <title>Menu principal</title>
+    {% endblock%}
+
+</head>
+
+<body class="bodyuser">
+
+<header>
+	<input type="checkbox" id="btn-menu">
+	<label for="btn-menu"><img src="/static/img/menu.png" alt="" class="imagen-menu"></label>
+
+	<nav class="menu">
+		<ul>
+			<ul><li><a href="{% url 'sistema:index' %}">Inicio</a></li></ul>
+			<ul><li><a href="{% url 'sistema:newprod' %}"> Registrar Producto</a></li></ul>
+      <ul><li><a href="{% url 'sistema:listaprod' %}"> Comprar productos</a></li></ul>
+      <ul><li><a href="{% url 'logout' %}"> Cerrar Sesion </a></li></ul>
+		</ul>
+	</nav>
+</header>
+
+
+<br>
+<br>
+<center>
+  <div id="map" style="width: 500px; height: 500px; background: grey;" />
+</center>
+<p id="latitud" value="{{ productos2.Latitud }}"></p>
+<p id="longitud" value="{{ productos2.Longitud }}"></p>
+
+<script  type="text/javascript" charset="UTF-8" >
+
+function moveMapToBerlin(map){
+  map.setCenter({lat:-33.447487, lng:-70.673676});
+  map.setZoom(11);
+}
+
+var platform = new H.service.Platform({
+  app_id: 'm2B0eh8gClt3nAHe9nRz',
+  app_code: 'cCUbdNpqqcmgUzUuDVvHkQ',
+  useHTTPS: true
+});
+
+var pixelRatio = window.devicePixelRatio || 1;
+
+var defaultLayers = platform.createDefaultLayers({
+  tileSize: pixelRatio === 1 ? 256 : 512,
+  ppi: pixelRatio === 1 ? undefined : 320
+});
+
+var map = new H.Map(document.getElementById('map'),
+  defaultLayers.normal.map, {pixelRatio: pixelRatio});
+
+var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+moveMapToBerlin(map);
+var latt = {{ productos2.Latitud }};
+var longg = {{ productos2.Longitud }};
+
+var icon = new H.map.Icon("https://image.flaticon.com/icons/svg/1041/1041355.svg", {size: {w: 32, h: 32}}),
+  coords = {lat: latt, lng: longg},
+  marker = new H.map.Marker(coords, {icon: icon});
+
+map.addObject(marker);
+map.setCenter(coords);
+
+
+
+function Sumar() {
+            var n1 = document.getElementById('id_precio').value;
+            var n2 = document.getElementById('id_cantidad').value;
+            var suma = parseInt(n1) * parseInt(n2);
+            if(n2 > {{ productos2.CantidadKG }}){
+              alert("La cantidad supera a la publicada")
+              document.getElementById('id_valor').value = "";
+            }
+            else
+            {
+              if(n2 == 0 || n2 == ""){
+                alert("Ingrese una cantidad")
+                document.getElementById('id_valor').value = "";
+              }
+              else
+              {
+                document.getElementById('id_valor').value = suma;
+              }
+            } 
+        }
+
+</script>
+
+<div>
+    <form method="POST" enctype="multipart/form-data" class="formulario">
+
+    {% csrf_token %}
+
+    <h2>Cantidad Publicada: {{ productos2.CantidadKG }} Kg.</h2>
+    <h2>Precio Unidad: ${{ productos2.Precio }}</h2>
+    <h2>Cantidad a comprar (Kg)</h2>
+    <input type="text" name="cantidad" required="" id="id_cantidad">
+    <input type="button" onclick="Sumar();" value="Calcular">
+    <h2>Total a pagar:</h2>
+    <input type="text" name="valor" required="" id="id_valor" readonly="true">
+    <h2>Vendedor: {{ productos2.UsuarioName }}</h2>
+
+
+
+
+    <div style="display: none;">
+        <input type="text" name="precio" class="form-control col-10" required="" id="id_precio" value="{{ productos2.Precio }}">
+        <input type="text" name="idproducto" class="form-control col-10" required="" id="id_idproducto" value="{{ productos2.id }}">
+        <input type="text" name="vendedor" class="form-control col-10" maxlength="200" required="" id="id_vendedor" value="{{ productos2.UsuarioName }}">
+        <input type="text" name="comprador" class="form-control col-10" maxlength="200" required="" id="id_comprador" value="{{ request.user }}">
+    </div>
+
+<br>
+<button type="submit" class="btn btn-primary btn-block btn-success"> REGISTRAR NUEVA ORDEN</button>
+</form>
+</div>
+
+<span id="Display"></span>
+
+
+<div class="finalizar">
+
+            <p>Duoc 2019</p>
+    <br>
+    <br>
+    <br>
+
+</div>
+
+
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-pano.js"></script>
+
+</body>
+</html>

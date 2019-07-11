@@ -1,0 +1,125 @@
+
+{% load staticfiles %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+
+    {% block extrastatic %}
+
+    {% endblock %}
+
+    <link rel="stylesheet" href="{% static 'css/fontello.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/estilos-logeado.css' %}">
+    <meta name="viewport" content="width=device-width">
+
+    {% block title %}
+    <title>Menu principal</title>
+    {% endblock%}
+
+    <script>
+
+    function funcion(){
+      var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      };
+
+    function success(pos) {
+      var crd = pos.coords;
+
+      console.log('Your current position is:');
+      console.log('Latitude : ' + crd.latitude);
+      console.log('Longitude: ' + crd.longitude);
+      console.log('More or less ' + crd.accuracy + ' meters.');
+      document.getElementById("id_Latitud").value = crd.latitude;
+      document.getElementById("id_Longitud").value = crd.longitude;
+    };
+
+    function error(err) {
+      console.warn('ERROR(' + err.code + '): ' + err.message);
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+        }
+
+
+    </script>
+</head>
+
+<body class="bodyuser" onload="funcion();">
+
+<header>
+  <input type="checkbox" id="btn-menu">
+  <label for="btn-menu"><img src="/static/img/menu.png" alt="" class="imagen-menu"></label>
+
+  <nav class="menu">
+    <ul>
+      <ul><li><a href="{% url 'sistema:index' %}">Inicio</a></li></ul>
+      <ul><li><a href="{% url 'sistema:newprod' %}"> Registrar Producto</a></li></ul>
+      <ul><li><a href="{% url 'sistema:listaprod' %}"> Comprar productos</a></li></ul>
+      <ul><li><a href="{% url 'logout' %}"> Cerrar Sesion </a></li></ul>
+    </ul>
+  </nav>
+</header>
+
+<div id="div-formulario">
+
+  <form method="POST"  enctype="multipart/form-data" class="formulario">
+
+    {% csrf_token %}
+    <h2>TIPO DE FRUTA/VERDURA</h2>
+    {{ form.TipoFruVer }}
+    <h2>FOTO DEL PRODUCTO</h2>
+    {{ form.FotoProducto }}
+    <h2>DESCRIPCION</h2>
+    {{ form.NombreProducto }}
+    <h2>CANTIDAD (KG)</h2>
+    {{ form.CantidadKG }}
+    <h2>PRECIO</h2>
+    {{ form.Precio }}
+    <div style="display: none;">
+    <h2>Usuario</h2>
+    <input type="text" name="UsuarioName" class="form-control col-10" maxlength="50" required id="id_UsuarioName" value="{{ request.user }}">
+    <h2>Usuario id</h2>
+    <input type="text" name="Usuario" class="form-control" required id="id_Usuario" value="{{ request.user.id }}">
+    <h2>Latitud</h2>
+    {{ form.Latitud }}
+    <h2>Longitud</h2>
+    {{ form.Longitud }}
+  </div>
+  
+
+<br>
+<button type="submit" class="btn btn-primary btn-block btn-success"> REGISTRAR NUEVA ORDEN</button>
+</form>
+  
+</div>
+
+
+
+
+
+{% block footer %}
+
+<div class="finalizar">
+
+            <p>Duoc 2019s</p>
+    <br>
+    <br>
+    <br>
+
+</div>
+
+{% endblock %}
+
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+
+</body>
+</html>
